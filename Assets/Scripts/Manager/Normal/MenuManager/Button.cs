@@ -1,121 +1,87 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI; // 引入UI命名空间，用于按钮事件
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 /// <summary>
-/// 按钮切换场景 + 点击/接触（悬停）音效
-/// 支持按索引切换下一个场景、指定名称/索引切换任意场景
+/// 精简版：按钮按名称切换场景+悬停/点击音效+退出游戏
+/// 自动悬浮音效 | 按场景名切换 | 退出游戏 | 音效不中断
 /// </summary>
-public class SceneSwitcherWithSound : MonoBehaviour
+public class SceneSwitcherSimple : MonoBehaviour, IPointerEnterHandler
 {
-    [Header("===== 场景切换配置 =====")]
-    [Tooltip("按名称切换时，填写Build Settings中的场景准确名称（区分大小写）")]
-    public string targetSceneName;
-    [Tooltip("按索引切换时，填写Build Settings中的场景索引（从0开始）")]
-    public int targetSceneIndex;
+    [Header("功能开关")]
+    public bool isQuitButton; // 勾选=退出按钮 | 不勾选=按名称切场景
 
-    [Header("===== 音效配置 =====")]
-    [Tooltip("鼠标接触（悬停）按钮时的音效")]
-    public AudioClip hoverSound; // 拖拽音效文件到该槽位
-    [Tooltip("鼠标点击按钮时的音效")]
-    public AudioClip clickSound; // 拖拽音效文件到该槽位
-    [Tooltip("音效音量（0-1）")]
+    [Header("场景配置")]
+    public string targetSceneName; // 填写Build Settings中的场景准确名称（区分大小写）
+
+    [Header("音效配置")]
+    public AudioClip hoverSound;
+    public AudioClip clickSound;
     [Range(0f, 1f)] public float soundVolume = 0.8f;
+    public float delay = 0.2f; // 音效播放延迟，确保完整播放
 
-    private AudioSource audioSource; // 音频源组件，用于播放音效
-    private Button targetButton;     // 绑定的目标按钮
+    private AudioSource _audio;
+    private Button _btn;
 
     void Awake()
     {
-        // 获取/创建音频源组件（无需手动添加，代码自动处理）
-        // 音频源与脚本挂载在同一对象，不影响其他音效播放
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
+        // 自动创建/获取AudioSource，解决MissingComponentException报错
+        _audio = GetComponent<AudioSource>();
+        if (_audio == null)
         {
-            audioSource = gameObject.AddComponent<AudioSource>();
+            _audio = gameObject.AddComponent<AudioSource>();
         }
-        // 配置音频源基础参数
-        audioSource.volume = soundVolume;
-        audioSource.playOnAwake = false; // 禁止运行时自动播放音效
+        // 2D音效配置，不受3D场景位置影响
+        _audio.volume = soundVolume;
+        _audio.playOnAwake = false;
+        _audio.spatialBlend = 0f;
 
-        // 获取当前对象上的Button组件（若脚本挂载在按钮上，直接获取）
-        targetButton = GetComponent<Button>();
-        if (targetButton != null)
+        // 初始化按钮并绑定点击事件
+        _btn = GetComponent<Button>();
+        if (_btn != null)
         {
-            // 绑定按钮点击事件（核心：点击切换下一个场景）
-            targetButton.onClick.AddListener(() =>
+            _btn.onClick.AddListener(() =>
             {
-                PlayClickSound(); // 先播放点击音效，再切换场景
-                SwitchToNextScene();
+                // 播放点击音效（双重判空，避免报错）
+                if (clickSound != null && _audio != null)
+                    _audio.PlayOneShot(clickSound);
+                // 根据功能开关执行对应逻辑：退出游戏 / 按名称切场景
+                Invoke(isQuitButton ? nameof(QuitGame) : nameof(SwitchSceneByName), delay);
             });
         }
     }
 
-    /// <summary>
-    /// 鼠标接触（悬停）按钮时调用（需手动绑定到按钮EventTrigger）
-    /// </summary>
-    public void PlayHoverSound()
+    // 鼠标悬浮自动播放音效（实现接口，无需手动配置EventTrigger）
+    public void OnPointerEnter(PointerEventData e)
     {
-        // 判空：避免未配置音效导致报错
-        if (hoverSound != null && audioSource != null)
-        {
-            audioSource.PlayOneShot(hoverSound); // 播放单次音效，不打断其他音效
-        }
+        if (hoverSound != null && _audio != null)
+            _audio.PlayOneShot(hoverSound);
     }
 
     /// <summary>
-    /// 播放点击音效（内部调用+可外部绑定）
+    /// 核心修改：按场景名称切换（替代原索引+1）
+    /// 需填写targetSceneName，匹配Build Settings中的准确名称
     /// </summary>
-    public void PlayClickSound()
+    void SwitchSceneByName()
     {
-        if (clickSound != null && audioSource != null)
-        {
-            audioSource.PlayOneShot(clickSound);
-        }
-    }
-
-    /// <summary>
-    /// 核心功能：切换到下一个场景（按Build Settings索引自动+1）
-    /// 适合顺序场景切换（如场景1→场景2→场景3）
-    /// </summary>
-    public void SwitchToNextScene()
-    {
-        int currentIndex = SceneManager.GetActiveScene().buildIndex;
-        int nextIndex = currentIndex + 1;
-
-        // 判读是否为最后一个场景，若是则跳回第一个场景（可删除该判断，改为不切换）
-        if (nextIndex >= SceneManager.sceneCountInBuildSettings)
-        {
-            nextIndex = 0;
-            Debug.LogWarning("已到最后一个场景，自动跳回第一个场景！");
-        }
-
-        SceneManager.LoadScene(nextIndex);
-    }
-
-    /// <summary>
-    /// 按场景名称切换（灵活，不受索引顺序影响）
-    /// </summary>
-    public void SwitchSceneByName()
-    {
+        // 判空保护，避免未填写场景名导致报错
         if (string.IsNullOrEmpty(targetSceneName))
         {
-            Debug.LogError("请在Inspector面板填写目标场景名称！");
+            Debug.LogError("请在Inspector面板填写目标场景名称（Build Settings中的准确名称）！");
             return;
         }
+        // 加载指定名称的场景
         SceneManager.LoadScene(targetSceneName);
     }
 
-    /// <summary>
-    /// 按场景索引切换（适合固定顺序场景）
-    /// </summary>
-    public void SwitchSceneByIndex()
+    // 退出游戏（适配编辑器/真机，原有功能不变）
+    void QuitGame()
     {
-        if (targetSceneIndex < 0 || targetSceneIndex >= SceneManager.sceneCountInBuildSettings)
-        {
-            Debug.LogError("场景索引超出范围！请检查Build Settings中的场景列表！");
-            return;
-        }
-        SceneManager.LoadScene(targetSceneIndex);
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }
