@@ -13,18 +13,18 @@ public class NormalUI : MonoBehaviour
 
     private void Start()
     {
-        //EventManager.AddListener(EventType.UpdateAllUI, UpdateAllUI);
+        EventManager.AddListener(EventType.UpdateAllUI, UpdateAllUI);
     }
 
     private void UpdateAllUI()
     {
         maskNums.text = WorldManager.Instance.limit.ToString();
-        senergyNums.text = BuildManager.Instance.senery.ToString();
-        cnergyNums.text = BuildManager.Instance.cenergy.ToString();
+        senergyNums.text = BuildManager.Instance.privateSenergy.ToString();
+        cnergyNums.text = BuildManager.Instance.privateCenergy.ToString();
     }
 
     private void OnDisable()
     {
-        //EventManager.RemoveListener(EventType.UpdateAllUI, UpdateAllUI);
+        EventManager.RemoveListener(EventType.UpdateAllUI, UpdateAllUI);
     }
 }

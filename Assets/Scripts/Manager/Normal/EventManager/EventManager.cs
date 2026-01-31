@@ -48,7 +48,7 @@ public class EventManager : MonoBehaviour
         else
         {
             // 如果事件类型不存在，抛出异常
-            //throw new Exception(string.Format("移除监听错误：没有事件码{0}", eventType));
+            throw new Exception(string.Format("移除监听错误：没有事件码{0}", eventType));
         }
     }
 

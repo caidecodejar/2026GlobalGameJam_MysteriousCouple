@@ -8,6 +8,9 @@ public class BuildManager : SingletonMonoBase<BuildManager>
     
     public int senery = 0;//Square能量数
     public int cenergy = 0;//Circle能量数
+
+    public int privateSenergy = 0;
+    public int privateCenergy = 0;
     
     // 要生成的方块预制体
     public GameObject blockPrefab;
@@ -25,11 +28,29 @@ public class BuildManager : SingletonMonoBase<BuildManager>
         
         //只针对Scene3
         EventManager.AddListener(EventType.CancelFixed, () => { cenergy=1;});
+        EventManager.AddListener<int>(EventType.EnergyCollect, EnergyCollect);
+    }
+
+    private void EnergyCollect(int type)
+    {
+        if (type == 1)
+        {
+            senery++;
+            privateSenergy++;
+        }
+
+        if (type == 2)
+        {
+            cenergy++;
+            privateCenergy++;
+        }
+        EventManager.Broadcast(EventType.UpdateAllUI);
     }
 
     private void OnDisable()
     {
         EventManager.RemoveListener(EventType.CancelFixed, () => { cenergy=1;});
+        EventManager.RemoveListener<int>(EventType.EnergyCollect, EnergyCollect);
     }
 
     void Update()

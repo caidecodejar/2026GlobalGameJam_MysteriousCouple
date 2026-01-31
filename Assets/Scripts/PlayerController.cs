@@ -11,7 +11,12 @@ public class PlayerController : MonoBehaviour
     public bool isGrounded; // 是否在地面上
     public Vector3 startPosition;
 
-    
+    // 在 Inspector 里拖一个空物体到玩家脚底
+    public Transform groundCheck;
+    // 射线长度
+    public float groundCheckDistance = 10f;
+    // 只检测 Ground 这一层
+    public LayerMask groundLayer;
 
     void Start()
     {
@@ -21,6 +26,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        CheckGround();
+        
         // 获取水平输入
         float moveInput = Input.GetAxis("Horizontal");
         // 设置玩家水平移动
@@ -50,13 +57,31 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    
+    private void CheckGround()
+    {
+        // 从 groundCheck 向下发一条射线，长度为 groundCheckDistance，只检测 groundLayer
+        RaycastHit2D hit = Physics2D.Raycast(
+            groundCheck.position,
+            Vector2.down,
+            groundCheckDistance,
+            groundLayer
+        );
+
+        isGrounded = hit.collider;
+        // 可选：在 Scene 视图画出射线帮助调试
+        Debug.DrawLine(groundCheck.position,
+            groundCheck.position + Vector3.down * groundCheckDistance,
+            isGrounded ? Color.green : Color.red);
+    }
+    
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // 检测是否与地面碰撞
-        if (collision.gameObject)
-        {
-            isGrounded = true;
-        }
+        // if (collision.gameObject)
+        // {
+        //     isGrounded = true;
+        // }
         
         // 死亡重置
         // 颜色反转初始，S能力初始，C能力初始，取消灰色固定，重置mask次数
@@ -67,6 +92,7 @@ public class PlayerController : MonoBehaviour
             EventManager.Broadcast(EventType.Invert);
             EventManager.Broadcast(EventType.CancelFixed);
             EventManager.Broadcast(EventType.UpdateSenergyUI);
+            //EventManager.Broadcast(EventType.UpdateAllUI);
         }
 
         // 到达终点，加载下一关
@@ -90,12 +116,12 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        // 检测是否离开地面
-        if (collision.gameObject.CompareTag("Black"))
-        {
-            isGrounded = false;
-        }
-    }
+    // private void OnCollisionExit2D(Collision2D collision)
+    // {
+    //     // 检测是否离开地面
+    //     if (collision.gameObject.CompareTag("Black"))
+    //     {
+    //         isGrounded = false;
+    //     }
+    // }
 }

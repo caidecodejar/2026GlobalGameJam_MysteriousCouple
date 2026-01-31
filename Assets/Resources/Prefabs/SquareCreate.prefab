@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2201580139879365889}
   - component: {fileID: 1798164510603251028}
   - component: {fileID: 826162623298245505}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SquareCreate
   m_TagString: Black
   m_Icon: {fileID: 0}
@@ -145,6 +145,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlack: 1
+  isFixed: 0
+  startColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &826162623298245505
 MonoBehaviour:
   m_ObjectHideFlags: 0

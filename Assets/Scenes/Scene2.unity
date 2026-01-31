@@ -2011,6 +2011,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WhiteSquare
       objectReference: {fileID: 0}
+    - target: {fileID: 6146170860998050968, guid: 0bba3cb9d255afe4cb96873273cae160, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
