@@ -51,6 +51,13 @@ public class WorldManager : SingletonMonoBase<WorldManager>
         }
 
         // TODO: 在这里加载关卡数据、刷新场景等
+
+        if (currentLevel + 1 == 6)
+        {
+            SceneMgr.Instance.LoadScene("EndMenu", null);
+            return;
+        }
+        
         SceneMgr.Instance.LoadScene("Scene" + (currentLevel + 1), null);
         Debug.Log($"切换到关卡 {currentLevel + 1}，limit = {limit}");
     }
