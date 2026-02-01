@@ -45,9 +45,10 @@ GameObject:
   - component: {fileID: 5899064024536448039}
   - component: {fileID: 4536430814655012459}
   - component: {fileID: 4389087187890091664}
+  - component: {fileID: 231291155243610787}
   m_Layer: 6
   m_Name: ___ Player
-  m_TagString: Black
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -231,3 +232,21 @@ MonoBehaviour:
   soundS: {fileID: 0}
   soundD: {fileID: 0}
   soundSpace: {fileID: 8300000, guid: 498fee02eda285c48a8519aeb0db25bf, type: 3}
+--- !u!114 &231291155243610787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6928240293993421026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab0e134822b88694fac0f60f7173f962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  soundW: {fileID: 8300000, guid: 498fee02eda285c48a8519aeb0db25bf, type: 3}
+  soundA: {fileID: 0}
+  soundS: {fileID: 0}
+  soundD: {fileID: 0}
+  soundSpace: {fileID: 8300000, guid: dc739025327410b46bdd5c0df6cf69ac, type: 3}
