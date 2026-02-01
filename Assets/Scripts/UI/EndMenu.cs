@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class EndMenu : MonoBehaviour
 {
-    public Button exitButton;
-    public Button RestartButton;
 
     public void Exit()
     {
