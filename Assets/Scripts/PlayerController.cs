@@ -90,6 +90,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = startPosition;
             WorldManager.Instance.limit = WorldManager.Instance.levelLimits[WorldManager.Instance.currentLevel];
+            
             EventManager.Broadcast(EventType.Invert);
             EventManager.Broadcast(EventType.CancelFixed);
             EventManager.Broadcast(EventType.UpdateSenergyUI);

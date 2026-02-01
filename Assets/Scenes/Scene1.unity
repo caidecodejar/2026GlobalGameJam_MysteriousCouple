@@ -1801,10 +1801,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4389087187890091664, guid: 35154f0e97d4386439e876fbf2b6f330, type: 3}
-      propertyPath: soundSpace
-      value: 
-      objectReference: {fileID: 8300000, guid: ad3f98096e601be41bafa8823cf585bb, type: 3}
     - target: {fileID: 6928240293993421026, guid: 35154f0e97d4386439e876fbf2b6f330, type: 3}
       propertyPath: m_Name
       value: /// Player
@@ -1900,7 +1896,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentLevel: 1
-  levelLimits: 000000000200000002000000010000000000000000000000
+  levelLimits: 000000000200000002000000010000000200000001000000
   limit: 2
 --- !u!4 &7843782090828555696
 Transform:

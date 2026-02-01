@@ -21,6 +21,7 @@ public class WorldManager : SingletonMonoBase<WorldManager>
     
     private void Start()
     {
+        limit = levelLimits[currentLevel];
         DontDestroyOnLoad(gameObject);
         EventManager.AddListener(EventType.NextLevel,LoadNextLevel);
     }
