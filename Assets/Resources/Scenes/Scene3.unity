@@ -608,6 +608,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4389087187890091664, guid: 35154f0e97d4386439e876fbf2b6f330, type: 3}
+      propertyPath: soundSpace
+      value: 
+      objectReference: {fileID: 8300000, guid: 9d57a68690d18cc4c90f3c927bd3f7dc, type: 3}
     - target: {fileID: 4536430814655012459, guid: 35154f0e97d4386439e876fbf2b6f330, type: 3}
       propertyPath: m_Size.y
       value: 4.6231356
@@ -640,13 +644,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ___ Player
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 231291155243610787, guid: 35154f0e97d4386439e876fbf2b6f330, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6928240293993421026, guid: 35154f0e97d4386439e876fbf2b6f330, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2133743498}
+      addedObject: {fileID: 2133743505}
   m_SourcePrefab: {fileID: 100100000, guid: 35154f0e97d4386439e876fbf2b6f330, type: 3}
 --- !u!1 &565170256
 GameObject:
@@ -2139,7 +2144,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6928240293993421026, guid: 35154f0e97d4386439e876fbf2b6f330, type: 3}
   m_PrefabInstance: {fileID: 530068306}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2133743498
+--- !u!114 &2133743505
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2156,7 +2161,7 @@ MonoBehaviour:
   soundA: {fileID: 0}
   soundS: {fileID: 0}
   soundD: {fileID: 0}
-  soundSpace: {fileID: 8300000, guid: dc739025327410b46bdd5c0df6cf69ac, type: 3}
+  soundSpace: {fileID: 0}
 --- !u!1001 &3066733750819011167
 PrefabInstance:
   m_ObjectHideFlags: 0
